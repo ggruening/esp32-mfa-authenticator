@@ -19,5 +19,6 @@ void reset_display_off_timer();
 void check_display_timeout();
 void display_handle_single_touch();
 void display_handle_double_touch();
+void init_minimal_display();
 
 #endif // DISPLAY_H

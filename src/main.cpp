@@ -12,6 +12,7 @@
 #include "wifi.hpp"
 #include "touch-screen.hpp"
 #include "manager.hpp"
+#include "display.hpp"
 
 static const char *TAG = "main";
 
@@ -32,28 +33,42 @@ void setup()
   Serial.begin(115200);
 #endif
   ESP_LOGI(TAG, "----------- begin setup ------------");
-  init_storage();
-  load_services();
-  Configuration config = Configuration::load();
-
-  init_auth(
-      config.authentication.pin.hash.c_str(),
-      config.authentication.pin.key.c_str(),
-      config.manager.authentication.username.c_str(),
-      config.manager.authentication.password.c_str(),
-      config.manager.authentication.key.c_str(),
-      config.manager.authentication.session_length);
-  init_touch_screen(config);
-  const char *local_network_ip = init_wifi(config).c_str();
-  init_clock();
-
-  if (config.is_manager_configured())
+  init_minimal_display();
+  try
   {
-    init_manager(config, local_network_ip);
+    init_storage();
+    load_services();
+    Configuration config = Configuration::load();
+
+    init_auth(
+        config.authentication.pin.hash.c_str(),
+        config.authentication.pin.key.c_str(),
+        config.manager.authentication.username.c_str(),
+        config.manager.authentication.password.c_str(),
+        config.manager.authentication.key.c_str(),
+        config.manager.authentication.session_length);
+    init_touch_screen(config);
+    const char *local_network_ip = init_wifi(config).c_str();
+    init_clock();
+
+    if (config.is_manager_configured())
+    {
+      init_manager(config, local_network_ip);
+    }
+    init_ui(
+        config.is_authentication_configured(),
+        config.authentication.unlock_attempts);
   }
-  init_ui(
-      config.is_authentication_configured(),
-      config.authentication.unlock_attempts);
+  catch (const std::runtime_error &e)
+  {
+    ESP_LOGE(TAG, "A fatal error occurred: %s", e.what());
+    ui_show_error_screen("Fatal Error", "Could not read\nconfig.yml or services.yml.\nPlease check the SD card.");
+    while (1)
+    {
+      ui_task_handler();
+      vTaskDelay(100 / portTICK_PERIOD_MS);
+    }
+  }
   ESP_LOGI(TAG, "----------- end setup ------------");
 }
 

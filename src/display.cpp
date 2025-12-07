@@ -106,7 +106,7 @@ void on_display_change(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *c
     lv_disp_flush_ready(disp);
 }
 
-void init_display(Configuration config)
+void init_display(const Configuration& config)
 {
     ESP_LOGI(TAG, "initializing display");
 
@@ -160,27 +160,4 @@ void display_register()
     ESP_LOGD(TAG, "display registered in lvgl");
 }
 
-void init_minimal_display()
-{
-    ESP_LOGI(TAG, "initializing minimal display");
 
-    ESP_LOGD(TAG, "initiliazing backlight");
-    pinMode(TFT_BCKL, OUTPUT);
-    digitalWrite(TFT_BCKL, HIGH);
-    ESP_LOGD(TAG, "backlight initialized");
-
-    ESP_LOGD(TAG, "initializing tft");
-    tft.begin();
-    tft.setSwapBytes(true);
-    tft.fillScreen(ILI9341_PINK);
-    tft.setRotation(2);
-    ESP_LOGD(TAG, "tft initialized");
-
-    display_is_active = true;
-    ESP_LOGD(TAG, "initializing lvgl");
-    lv_init();
-    ESP_LOGD(TAG, "initializing lvgl");
-    display_register();
-
-    ESP_LOGI(TAG, "minimal display initialized");
-}

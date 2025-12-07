@@ -33,7 +33,6 @@ void setup()
   Serial.begin(115200);
 #endif
   ESP_LOGI(TAG, "----------- begin setup ------------");
-  init_minimal_display();
   try
   {
     init_storage();
@@ -61,6 +60,8 @@ void setup()
   }
   catch (const std::runtime_error &e)
   {
+    Configuration config;
+    init_display(config);
     ESP_LOGE(TAG, "A fatal error occurred: %s", e.what());
     ui_show_error_screen("Fatal Error", "Could not read\nconfig.yml or services.yml.\nPlease check the SD card.");
     while (1)

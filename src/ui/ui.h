@@ -42,6 +42,7 @@ extern "C"
 	void ui_touch_calibration_screen_step_2();
 	void ui_touch_calibration_screen_step_3();
 	void ui_touch_calibration_screen_destroy();
+	void ui_show_error_screen(const char *title, const char *message);
 
 #ifdef __cplusplus
 } /*extern "C"*/

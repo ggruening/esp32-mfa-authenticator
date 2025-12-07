@@ -1,3 +1,10 @@
+# [0.20.0](https://github.com/AllanOricil/esp32-mfa-authenticator/compare/v0.19.2...v0.20.0) (2025-12-07)
+
+
+### Features
+
+* handle missing SD card and config files gracefully ([4d8cdd1](https://github.com/AllanOricil/esp32-mfa-authenticator/commit/4d8cdd169bdb89bec9d33cfa326cab7c8ccd9383))
+
 ## [0.19.2](https://github.com/AllanOricil/esp32-mfa-authenticator/compare/v0.19.1...v0.19.2) (2025-12-02)
 
 
